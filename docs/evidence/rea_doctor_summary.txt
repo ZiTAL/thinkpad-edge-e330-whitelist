@@ -1,0 +1,16 @@
+healthy=True environment_healthy=True
+cli=6.8.0 skill=aligned
+node                     ok=True healthy 26.13.0
+host                     ok=True healthy linuxmint 22.3
+hopper                   ok=False missing_analysis_engine 
+ghidra                   ok=True healthy /opt/ghidra
+ghidra-platform          ok=True healthy linux
+ghidra-architecture      ok=True healthy x64
+ghidra-installation      ok=True healthy /opt/ghidra/Ghidra/application.properties
+ghidra-version           ok=True healthy 12.1.4
+ghidra-headless          ok=True healthy /opt/ghidra/support/analyzeHeadless
+ghidra-native_decompiler ok=True healthy /opt/ghidra/Ghidra/Features/Decompiler/os/linux_x86_64/decompile reports elf x86_64, which matches linux/x64
+ghidra-java              ok=True healthy 21.0.12.1; 64-bit; JDK; /usr/lib/jvm/java-21-openjdk-amd64; accepted a 64-bit full JDK 21 or newer
+ida-registration         ok=False missing_analysis_engine IDA MCP registration is not configured.
+jadx                     ok=False missing_analysis_engine Set REA_JADX_MCP_JAR to the absolute path of a caller-supplied jadx-headless-mcp 0.7.1 JAR. REA does not download or install it.
+kuna-installation        ok=False missing_analysis_engine Set REA_KUNA_COMMAND to the absolute path of a caller-supplied kuna executable (verified with 1.833). REA does not download, install or update Kuna.

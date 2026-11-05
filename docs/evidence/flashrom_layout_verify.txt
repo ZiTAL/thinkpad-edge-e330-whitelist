@@ -1,0 +1,24 @@
+== flashrom layout verify (read-only) ==
+layout: 00820000:00a03fff biosmod
+
+flashrom unknown on Linux 6.17.0-42-generic (x86_64)
+flashrom is free software, get the source code at https://flashrom.org
+
+Using clock_gettime for delay loops (clk_id: 1, resolution: 1ns).
+Using region: "biosmod".
+Found chipset "Intel HM77".
+Enabling flash write... SPI Configuration is locked down.
+FREG0: Flash Descriptor region (0x00000000-0x00000fff) is read-only.
+FREG1: BIOS region (0x00800000-0x00bfffff) is read-write.
+FREG2: Management Engine region (0x00001000-0x007fffff) is locked.
+Not all flash regions are freely accessible by flashrom. This is most likely
+due to an active ME. Please see https://flashrom.org/ME for details.
+At least some flash regions are read protected. You have to use a flash
+layout and include only accessible regions. For write operations, you'll
+additionally need the --noverify-all switch. See manpage for more details.
+Enabling hardware sequencing due to multiple flash chips detected.
+OK.
+Found Programmer flash chip "Opaque flash chip" (12288 kB, Programmer-specific) on internal.
+Verifying flash... FAILED at 0x00820059! Expected=0xd6, Found=0x1f, failed byte count from 0x00820000-0x00a03fff: 0x1e1a36
+
+exit=0

@@ -1,0 +1,10 @@
+# Firmware images and dumps (machine-specific data; not published)
+*.bin
+*.dump/
+*.report.txt
+*.guids.csv
+
+# Local build artifacts
+__pycache__/
+*.pyc
+wma_0xbd0.err

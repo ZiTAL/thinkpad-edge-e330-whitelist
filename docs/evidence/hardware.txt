@@ -1,0 +1,89 @@
+== Fecha ==
+2026-11-05T15:15:56+01:00
+
+== Kernel ==
+Linux thinkpad 6.17.0-42-generic #42-Ubuntu SMP PREEMPT_DYNAMIC Thu Jul 23 19:56:28 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux
+
+== DMI ==
+sys_vendor:      LENOVO
+product_name:    3354DVG
+product_version: ThinkPad Edge E330
+board_name:      3354DVG
+board_version:   0B98401 Pro
+bios_vendor:     LENOVO
+bios_version:    H3ET72WW(1.09)
+bios_date:       02/25/2013
+chassis_type:    10
+product_serial:  ?
+
+== lspci ==
+00:00.0 Host bridge [0600]: Intel Corporation 3rd Gen Core processor DRAM Controller [8086:0154] (rev 09)
+00:02.0 VGA compatible controller [0300]: Intel Corporation 3rd Gen Core processor Graphics Controller [8086:0166] (rev 09)
+00:14.0 USB controller [0c03]: Intel Corporation 7 Series/C210 Series Chipset Family USB xHCI Host Controller [8086:1e31] (rev 04)
+00:16.0 Communication controller [0780]: Intel Corporation 7 Series/C216 Chipset Family MEI Controller #1 [8086:1e3a] (rev 04)
+00:1a.0 USB controller [0c03]: Intel Corporation 7 Series/C216 Chipset Family USB Enhanced Host Controller #2 [8086:1e2d] (rev 04)
+00:1b.0 Audio device [0403]: Intel Corporation 7 Series/C216 Chipset Family High Definition Audio Controller [8086:1e20] (rev 04)
+00:1c.0 PCI bridge [0604]: Intel Corporation 7 Series/C216 Chipset Family PCI Express Root Port 1 [8086:1e10] (rev c4)
+00:1c.1 PCI bridge [0604]: Intel Corporation 7 Series/C210 Series Chipset Family PCI Express Root Port 2 [8086:1e12] (rev c4)
+00:1c.2 PCI bridge [0604]: Intel Corporation 7 Series/C210 Series Chipset Family PCI Express Root Port 3 [8086:1e14] (rev c4)
+00:1c.3 PCI bridge [0604]: Intel Corporation 7 Series/C216 Chipset Family PCI Express Root Port 4 [8086:1e16] (rev c4)
+00:1d.0 USB controller [0c03]: Intel Corporation 7 Series/C216 Chipset Family USB Enhanced Host Controller #1 [8086:1e26] (rev 04)
+00:1f.0 ISA bridge [0601]: Intel Corporation HM77 Express Chipset LPC Controller [8086:1e57] (rev 04)
+00:1f.2 IDE interface [0101]: Intel Corporation 7 Series Chipset Family 4-port SATA Controller [IDE mode] [8086:1e01] (rev 04)
+00:1f.3 SMBus [0c05]: Intel Corporation 7 Series/C216 Chipset Family SMBus Controller [8086:1e22] (rev 04)
+00:1f.5 IDE interface [0101]: Intel Corporation 7 Series Chipset Family 2-port SATA Controller [IDE mode] [8086:1e09] (rev 04)
+02:00.0 Network controller [0280]: Broadcom Inc. and subsidiaries BCM43228 802.11a/b/g/n [14e4:4359]
+03:00.0 Unassigned class [ff00]: Realtek Semiconductor Co., Ltd. RTS5209 PCI Express Card Reader [10ec:5209] (rev 01)
+08:00.0 Ethernet controller [0200]: Realtek Semiconductor Co., Ltd. RTL8111/8168/8211/8411 PCI Express Gigabit Ethernet Controller [10ec:8168] (rev 07)
+
+== lsusb ==
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Bus 003 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 003 Device 002: ID 8087:0024 Intel Corp. Integrated Rate Matching Hub
+Bus 004 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 004 Device 002: ID 8087:0024 Intel Corp. Integrated Rate Matching Hub
+Bus 004 Device 003: ID 046d:c016 Logitech, Inc. Optical Wheel Mouse
+Bus 004 Device 004: ID 0a5c:21f3 Broadcom Corp. BCM20702A0
+Bus 004 Device 005: ID 5986:0299 Bison Electronics Inc. Lenovo Integrated Webcam
+
+== USB tree ==
+/:  Bus 001.Port 001: Dev 001, Class=root_hub, Driver=xhci_hcd/4p, 480M
+/:  Bus 002.Port 001: Dev 001, Class=root_hub, Driver=xhci_hcd/4p, 5000M
+/:  Bus 003.Port 001: Dev 001, Class=root_hub, Driver=ehci-pci/3p, 480M
+    |__ Port 001: Dev 002, If 0, Class=Hub, Driver=hub/8p, 480M
+/:  Bus 004.Port 001: Dev 001, Class=root_hub, Driver=ehci-pci/3p, 480M
+    |__ Port 001: Dev 002, If 0, Class=Hub, Driver=hub/6p, 480M
+        |__ Port 002: Dev 003, If 0, Class=Human Interface Device, Driver=usbhid, 1.5M
+        |__ Port 004: Dev 004, If 0, Class=Vendor Specific Class, Driver=btusb, 12M
+        |__ Port 004: Dev 004, If 1, Class=Vendor Specific Class, Driver=btusb, 12M
+        |__ Port 004: Dev 004, If 2, Class=Vendor Specific Class, Driver=btusb, 12M
+        |__ Port 004: Dev 004, If 3, Class=Application Specific Interface, Driver=[none], 12M
+        |__ Port 005: Dev 005, If 0, Class=Video, Driver=uvcvideo, 480M
+        |__ Port 005: Dev 005, If 1, Class=Video, Driver=uvcvideo, 480M
+
+== Interfaces ==
+lo               UNKNOWN        xx:xx:xx:xx:xx:xx <LOOPBACK,UP,LOWER_UP> 
+enp8s0           DOWN           xx:xx:xx:xx:xx:xx <NO-CARRIER,BROADCAST,MULTICAST,UP> 
+wlp2s0           UP             xx:xx:xx:xx:xx:xx <BROADCAST,MULTICAST,UP,LOWER_UP> 
+tun0             UNKNOWN        <POINTOPOINT,MULTICAST,NOARP,UP,LOWER_UP> 
+
+== flashrom probe ==
+flashrom unknown on Linux 6.17.0-42-generic (x86_64)
+flashrom is free software, get the source code at https://flashrom.org
+
+Using clock_gettime for delay loops (clk_id: 1, resolution: 1ns).
+Found chipset "Intel HM77".
+Enabling flash write... SPI Configuration is locked down.
+FREG0: Flash Descriptor region (0x00000000-0x00000fff) is read-only.
+FREG1: BIOS region (0x00800000-0x00bfffff) is read-write.
+FREG2: Management Engine region (0x00001000-0x007fffff) is locked.
+Not all flash regions are freely accessible by flashrom. This is most likely
+due to an active ME. Please see https://flashrom.org/ME for details.
+At least some flash regions are read protected. You have to use a flash
+layout and include only accessible regions. For write operations, you'll
+additionally need the --noverify-all switch. See manpage for more details.
+Enabling hardware sequencing due to multiple flash chips detected.
+OK.
+Found Programmer flash chip "Opaque flash chip" (12288 kB, Programmer-specific) on internal.
+No operations were specified.

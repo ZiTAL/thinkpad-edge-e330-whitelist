@@ -1,0 +1,7 @@
+parseSectionHeader: section with unknown type 00h
+parseVolumeHeader: volume header checksum is invalid
+parseRawArea: volume size stored in header 40000h differs from calculated using block map 61000h
+parseVolumeHeader: volume header checksum is invalid
+parseRawArea: volume size stored in header 32000h differs from calculated using block map 31000h
+parseVolumeNonUefiData: non-UEFI data found in volume free space
+performSecondPass: the last VTF appears inside compressed item

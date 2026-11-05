@@ -1,0 +1,27 @@
+== Module info ==
+Type: File
+Subtype: DXE driver
+Text: LenovoWmaPolicyDxe.efi
+Offset: 525520h
+Full size: 21F4h (8692)
+Header size: 18h (24)
+Body size: 21DCh (8668)
+File GUID: 79E0EDD7-9D1D-4F41-AE1A-F896169E5216
+Type: 07h
+Attributes: 40h
+State: F8h
+Header checksum: CBh, valid
+Data checksum: 8Bh, valid
+
+== Section info ==
+Type: Section
+Subtype: GUID defined
+Offset: 18h
+Full size: 21DCh (8668)
+Header size: 1Ch (28)
+Body size: 21C0h (8640)
+Section GUID: FC1BCDB0-7D31-49AA-936A-A4600D9DD083
+Type: 02h
+Attributes: 0002h
+Checksum type: CRC32
+Checksum: 9C728A34h, valid

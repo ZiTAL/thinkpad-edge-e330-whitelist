@@ -1,0 +1,26 @@
+
+/tmp/opencode/patched_pe_evidence.bin:     file format pei-x86-64
+
+
+Disassembly of section .text:
+
+0000000000000c48 <.text+0xa08>:
+     c48:	movzx  edx,r8w
+     c4c:	shl    rdx,0x4
+     c50:	mov    eax,DWORD PTR [rdx+rbx*1]
+     c53:	cmp    eax,0x6
+     c56:	jne    0xc22
+     c58:	xor    eax,eax
+     c5a:	jmp    0xc85
+     c5f:	nop
+     c60:	test   rax,rax
+     c63:	jns    0xc7b
+     c65:	mov    DWORD PTR [rsp+0xa8],0x1
+     c70:	mov    eax,DWORD PTR [rsp+0xa8]
+     c77:	test   eax,eax
+     c79:	jne    0xc70
+     c7b:	movabs rax,0x8000000000000007
+     c85:	lea    r11,[rsp+0x70]
+     c8a:	mov    rbx,QWORD PTR [r11+0x20]
+     c8e:	rex.WB
+     c8f:	.byte 0x8b
