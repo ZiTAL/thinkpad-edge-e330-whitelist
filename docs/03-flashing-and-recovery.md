@@ -2,9 +2,10 @@
 
 ## 0. Status
 
-**Nothing has been written to the flash.** The machine still runs the original
-BIOS H3ET72WW (1.09). This document describes the procedure for when the write
-is approved.
+**The modified block was written and verified on 2026-11-05.** The exact
+command, power state and readback are in [`06-flash-log.md`](06-flash-log.md).
+This document is kept as the procedure reference and for re-flashing/rollback.
+The running OS still uses the old firmware in RAM until the next reboot.
 
 ## 1. Before you start
 

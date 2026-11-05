@@ -1,5 +1,10 @@
 # ThinkPad Edge E330 — eliminación del whitelist WiFi/WWAN
 
+> **Nota:** esta es la documentación original en español, conservada como
+> referencia histórica. El estado actual (firmware escrito y verificado) está
+> en el [README en inglés](../../README.md) y en el
+> [registro de flasheo](../06-flash-log.md).
+
 **Estado: firmware parcheado y validado. La flash NO se ha tocado.** El equipo
 sigue arrancando con el BIOS original H3ET72WW (1.09). El siguiente paso
 (escribir en la flash) queda pendiente de decisión.

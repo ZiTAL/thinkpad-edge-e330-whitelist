@@ -1,8 +1,8 @@
 # ThinkPad Edge E330 — WiFi/WWAN whitelist removal
 
-**Status: firmware patched and validated. The flash has NOT been written.** The
-machine still boots the original BIOS H3ET72WW (1.09). Writing to the flash is
-the only pending decision.
+**Status: firmware written and verified on 2026-11-05. Boot/card test pending.**
+The flash now contains the patched BIOS region; the running OS still uses the
+old code in RAM until the next reboot.
 
 ---
 
@@ -30,6 +30,7 @@ the only pending decision.
 | [`docs/03-flashing-and-recovery.md`](docs/03-flashing-and-recovery.md) | Write commands, post-flash checks, rollback, crisis recovery, SPI programmer |
 | [`docs/04-risks.md`](docs/04-risks.md) | Risk matrix, probability/impact, mitigations and recommendation |
 | [`docs/05-inventory-and-environment.md`](docs/05-inventory-and-environment.md) | File inventory and hashes, tools, versions, environment, commands used |
+| [`docs/06-flash-log.md`](docs/06-flash-log.md) | What was written, when, power state, verification and readback |
 | [`docs/evidence/README.md`](docs/evidence/README.md) | Evidence logs and raw validation output |
 | [`docs/es/README.md`](docs/es/README.md) | Original Spanish documentation (historical) |
 
@@ -53,16 +54,27 @@ Scripts: `patch_bios.py` (builds the patched image), `verify_layout.py`
 
 ## Next step
 
-The write **has not been performed**. When you decide to go ahead, the least
-risky software path is to write only the modified block:
+The write **was performed and verified on 2026-11-05**. The exact command and
+output are in [`docs/06-flash-log.md`](docs/06-flash-log.md). The independent
+full BIOS-region readback matches `bios_region_patched.bin` byte for byte.
+
+The next step is to install the AX210 in the full-size WLAN slot, reconnect the
+adapter's USB cable for Bluetooth, reboot, and check:
+
+```bash
+lspci -nn | grep -i 8086:2725
+lsusb | grep -i 8087:0032
+dmesg | grep -iE 'iwlwifi|bluetooth'
+```
+
+The command used, for reference:
 
 ```bash
 sudo flashrom -p internal -l biosmod.layout -i biosmod -w flash_image_12m.bin -N
 ```
 
-Read [`docs/03-flashing-and-recovery.md`](docs/03-flashing-and-recovery.md) and
-[`docs/04-risks.md`](docs/04-risks.md) first. Without an SPI programmer, a
-failed write can leave the laptop unbootable.
+If anything goes wrong, see [`docs/03-flashing-and-recovery.md`](docs/03-flashing-and-recovery.md)
+and [`docs/04-risks.md`](docs/04-risks.md).
 
 ## Scope of the patch
 

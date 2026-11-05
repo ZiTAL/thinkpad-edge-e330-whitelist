@@ -1,12 +1,15 @@
 # Evidence — index
 
-Logs and artifacts generated during analysis and validation. All are
-reproducible with the commands in `docs/02-build-and-validation.md`.
+Logs and artifacts generated during analysis, validation and the write itself.
+All are reproducible with the commands in `docs/02-build-and-validation.md` and
+`docs/03-flashing-and-recovery.md`.
 
 | File | What it shows |
 |---|---|
 | `hardware.txt` | Machine identity (DMI), kernel, `lspci`, `lsusb`, USB tree, interfaces and the flashrom probe with the region map. MAC addresses are redacted. |
-| `flashrom_layout_verify.txt` | The `00820000:00a03fff` layout and the 12 MB file are correct; verification fails only in the block that has not been flashed yet |
+| `flashrom_layout_verify.txt` | Pre-write check: the `00820000:00a03fff` layout and the 12 MB file are correct; verification fails only in the block that had not been flashed yet |
+| `flash_write.txt` | Actual write: `Erase/write done` and `Verifying flash... VERIFIED` |
+| `flash_readback.txt` | Independent full BIOS-region readback after the write: 0 differing bytes against `bios_region_patched.bin` |
 | `verify_patched.txt` | Full validation: hashes, CRC32, FFS checksums, 3-range diff and 12 MB image consistency |
 | `uefiextract.txt` | UEFIExtract re-parses the patched image without new errors |
 | `module_info.txt` | FFS and GUIDed section info for the patched module: CRC32 and checksums valid |
@@ -23,6 +26,8 @@ firmware binary, so it is excluded from the public repository. Its SHA-256 is
 
 ```text
 125c0be42586935b7b622f881151b6bcb0f3258648b81d38fe59d32f6b684cd9  flashrom_layout_verify.txt
+728727ac5167b1dd0a45761aa72771e6234be9232db43d5f45e43854e67867d0  flash_write.txt
+25e2cb02f319fe7303783d21a1b668e2ff53ab2ff133c9c38c83018685a0ba74  flash_readback.txt
 2b38ec7ea33c84162cd2576f402934046f673219b79224e701b422815bf6bbfa  hardware.txt
 013562022c8a1a46ac4743f954558e0a880aebb35b221f617d48411b130dfcd3  module_info.txt
 21c46fdf865015ae4de010d424e1684a961128628dd0bb991f76bea925a114cf  objdump_patch.txt
@@ -33,7 +38,7 @@ c55117ed628d7ff33b71290773ac54729e33d684c1a7d52ccda6a07d46e7c95f  uefiextract.tx
 ddda58b2ab5bcd07ad8d4f852b98db733e7d270c5256af7aacd8b63f734b079e  verify_patched.txt
 ```
 
-## Note about the flashrom `FAILED`
+## Note about the pre-write flashrom `FAILED`
 
 `flashrom_layout_verify.txt` ends with:
 
@@ -43,10 +48,12 @@ Expected=0xd6, Found=0x1f,
 failed byte count from 0x00820000-0x00a03fff: 0x1e1a36
 ```
 
-This is **expected**: the flash still holds the original firmware and is being
-compared against the patched image. The mismatch at `0x00820059` is the outer
-FFS data checksum (`0x1f` original → `0xd6` patched), and the large byte count
-corresponds to the recompressed LZMA stream. It does not indicate a bad image.
+This is **expected for the pre-write check**: at that moment the flash still
+held the original firmware and was being compared against the patched image.
+The mismatch at `0x00820059` is the outer FFS data checksum (`0x1f` original →
+`0xd6` patched), and the large byte count corresponds to the recompressed LZMA
+stream. It does not indicate a bad image. The actual write is in
+`flash_write.txt`.
 
 ## Note about `wma_0xbd0.json`
 
