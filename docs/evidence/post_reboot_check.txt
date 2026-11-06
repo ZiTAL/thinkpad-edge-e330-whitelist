@@ -1,0 +1,76 @@
+# Post-reboot verification (after whitelist patch)
+# generated: 2026-11-05T16:21:03+01:00  host: thinkpad
+
+$ uname -sr
+Linux 6.17.0-42-generic
+
+$ cat /sys/class/dmi/id/product_name
+3354DVG
+
+$ cat /sys/class/dmi/id/bios_version
+H3ET72WW(1.09)
+
+$ uptime -s   # boot time
+2026-11-05 16:11:37
+
+$ lspci -nn | grep -i network
+02:00.0 Network controller [0280]: Broadcom Inc. and subsidiaries BCM43228 802.11a/b/g/n [14e4:4359]
+
+$ lsusb   # Bluetooth + webcam
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 001 Device 002: ID 8087:0024 Intel Corp. Integrated Rate Matching Hub
+Bus 001 Device 003: ID 046d:c016 Logitech, Inc. Optical Wheel Mouse
+Bus 001 Device 004: ID 0a5c:21f3 Broadcom Corp. BCM20702A0
+Bus 001 Device 005: ID 5986:0299 Bison Electronics Inc. Lenovo Integrated Webcam
+Bus 002 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 003 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Bus 004 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 004 Device 002: ID 8087:0024 Intel Corp. Integrated Rate Matching Hub
+
+$ dmesg | grep -iE "iwlwifi|1802|unauthorized|ax210|2725"
+[    4.518027] Loaded X.509 cert 'sforshee: 00b28ddf47aef9cea7'
+
+$ dmesg | grep -iE "wl 0000|cfg80211"
+[    4.517405] cfg80211: Loading compiled-in X.509 certificates for regulatory database
+[    5.114751] wl 0000:02:00.0 wlp2s0: renamed from wlan0
+
+$ ip -br link
+lo               UNKNOWN        xx:xx:xx:xx:xx:xx <LOOPBACK,UP,LOWER_UP> 
+enp8s0           DOWN           xx:xx:xx:xx:xx:xx <NO-CARRIER,BROADCAST,MULTICAST,UP> 
+wlp2s0           UP             xx:xx:xx:xx:xx:xx <BROADCAST,MULTICAST,UP,LOWER_UP> 
+tun0             UNKNOWN        <POINTOPOINT,MULTICAST,NOARP,UP,LOWER_UP> 
+
+$ rfkill list
+0: tpacpi_bluetooth_sw: Bluetooth
+	Soft blocked: no
+	Hard blocked: no
+1: phy0: Wireless LAN
+	Soft blocked: no
+	Hard blocked: no
+2: brcmwl-0: Wireless LAN
+	Soft blocked: no
+	Hard blocked: no
+3: hci0: Bluetooth
+	Soft blocked: no
+	Hard blocked: no
+
+$ sudo flashrom -p internal -l biosmod.layout -i biosmod -v flash_image_12m.bin -N
+flashrom unknown on Linux 6.17.0-42-generic (x86_64)
+flashrom is free software, get the source code at https://flashrom.org
+
+Using clock_gettime for delay loops (clk_id: 1, resolution: 1ns).
+Using region: "biosmod".
+Found chipset "Intel HM77".
+Enabling flash write... SPI Configuration is locked down.
+FREG0: Flash Descriptor region (0x00000000-0x00000fff) is read-only.
+FREG1: BIOS region (0x00800000-0x00bfffff) is read-write.
+FREG2: Management Engine region (0x00001000-0x007fffff) is locked.
+Not all flash regions are freely accessible by flashrom. This is most likely
+due to an active ME. Please see https://flashrom.org/ME for details.
+At least some flash regions are read protected. You have to use a flash
+layout and include only accessible regions. For write operations, you'll
+additionally need the --noverify-all switch. See manpage for more details.
+Enabling hardware sequencing due to multiple flash chips detected.
+OK.
+Found Programmer flash chip "Opaque flash chip" (12288 kB, Programmer-specific) on internal.
+Verifying flash... VERIFIED.

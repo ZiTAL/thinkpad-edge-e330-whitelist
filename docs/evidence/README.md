@@ -10,6 +10,8 @@ All are reproducible with the commands in `docs/02-build-and-validation.md` and
 | `flashrom_layout_verify.txt` | Pre-write check: the `00820000:00a03fff` layout and the 12 MB file are correct; verification fails only in the block that had not been flashed yet |
 | `flash_write.txt` | Actual write: `Erase/write done` and `Verifying flash... VERIFIED` |
 | `flash_readback.txt` | Independent full BIOS-region readback after the write: 0 differing bytes against `bios_region_patched.bin` |
+| `post_reboot_check.txt` | First boot after the write (2026-11-05): patched block re-verifies, no 1802, original Broadcom still installed |
+| `ax210_card_test.txt` | AX210 card test (2026-11-06): Wi-Fi `8086:2725` + Bluetooth `8087:0032` detected, `iwlwifi` loaded, Wi-Fi connected, no 1802, patch `VERIFIED` |
 | `verify_patched.txt` | Full validation: hashes, CRC32, FFS checksums, 3-range diff and 12 MB image consistency |
 | `uefiextract.txt` | UEFIExtract re-parses the patched image without new errors |
 | `module_info.txt` | FFS and GUIDed section info for the patched module: CRC32 and checksums valid |
@@ -36,6 +38,8 @@ c5e3b8055771e7c933b3478413fda815f4f41979adb9799544616fa144f8072f  rea_doctor_sum
 6dc9f8dba72c6bacf9e3fcbfb6e10d60b3342c57523f1243fd13666ca18cfe91  rea_registration.json
 c55117ed628d7ff33b71290773ac54729e33d684c1a7d52ccda6a07d46e7c95f  uefiextract.txt
 ddda58b2ab5bcd07ad8d4f852b98db733e7d270c5256af7aacd8b63f734b079e  verify_patched.txt
+a2f8ef1c3a902d0d308c65f224a602018f2941d3671ca750d2a24e38c95167d4  post_reboot_check.txt
+d84d7306c7f1656da1f6bd9a516550d5d4c18c269c1efd0abe303238f6b6d410  ax210_card_test.txt
 ```
 
 ## Note about the pre-write flashrom `FAILED`

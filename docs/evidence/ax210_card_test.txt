@@ -1,0 +1,125 @@
+# AX210 card test after whitelist patch
+# generated: 2026-11-06T09:35:09+01:00  host: thinkpad
+
+$ uname -sr
+Linux 6.17.0-42-generic
+
+$ cat /sys/class/dmi/id/product_name
+3354DVG
+
+$ cat /sys/class/dmi/id/bios_version
+H3ET72WW(1.09)
+
+$ uptime -s   # boot time
+2026-11-06 09:32:34
+
+$ lspci -nn | grep -i network
+02:00.0 Network controller [0280]: Intel Corporation Wi-Fi 6E(802.11ax) AX210/AX1675* 2x2 [Typhoon Peak] [8086:2725] (rev 1a)
+
+$ lsusb   # AX210 Bluetooth + webcam
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 002 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 002 Device 002: ID 8087:0024 Intel Corp. Integrated Rate Matching Hub
+Bus 002 Device 003: ID 046d:c016 Logitech, Inc. Optical Wheel Mouse
+Bus 002 Device 004: ID 8087:0032 Intel Corp. AX210 Bluetooth
+Bus 002 Device 005: ID 5986:0299 Bison Electronics Inc. Lenovo Integrated Webcam
+Bus 003 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Bus 004 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 004 Device 002: ID 8087:0024 Intel Corp. Integrated Rate Matching Hub
+
+$ dmesg | grep -iE "iwlwifi|1802|unauthorized|ax210|2725|8087:0032"
+[    0.648777] pci 0000:02:00.0: [8086:2725] type 00 class 0x028000 PCIe Endpoint
+[    4.983140] iwlwifi 0000:02:00.0: Detected crf-id 0x400410, cnv-id 0x400410 wfpm id 0x80000000
+[    4.983163] iwlwifi 0000:02:00.0: PCI dev 2725/0024, rev=0x420, rfid=0x10d000
+[    4.983170] iwlwifi 0000:02:00.0: Detected Intel(R) Wi-Fi 6E AX210 160MHz
+[    5.061841] iwlwifi 0000:02:00.0: loaded firmware version 89.123cf747.0 ty-a0-gf-a0-89.ucode op_mode iwlmvm
+[    7.060876] iwlwifi 0000:02:00.0: WFPM_UMAC_PD_NOTIFICATION: 0x20
+[    7.060904] iwlwifi 0000:02:00.0: WFPM_LMAC2_PD_NOTIFICATION: 0x1f
+[    7.060920] iwlwifi 0000:02:00.0: WFPM_AUTH_KEY_0: 0x90
+[    7.060936] iwlwifi 0000:02:00.0: CNVI_SCU_SEQ_DATA_DW9: 0x0
+[    7.060961] iwlwifi 0000:02:00.0: Detected RF GF, rfid=0x10d000
+[    7.145569] iwlwifi 0000:02:00.0: base HW address: xx:xx:xx:xx:xx:xx
+[    7.174206] iwlwifi 0000:02:00.0 wlp2s0: renamed from wlan0
+[    7.889923] iwlwifi 0000:02:00.0: WFPM_UMAC_PD_NOTIFICATION: 0x20
+[    7.889955] iwlwifi 0000:02:00.0: WFPM_LMAC2_PD_NOTIFICATION: 0x1f
+[    7.889969] iwlwifi 0000:02:00.0: WFPM_AUTH_KEY_0: 0x90
+[    7.889990] iwlwifi 0000:02:00.0: CNVI_SCU_SEQ_DATA_DW9: 0x0
+
+$ dmesg | grep -iE "1802|unauthorized|not supported|whitelist"   # expect empty
+(no match)
+
+$ dmesg | grep -iE "iwlwifi.*(error|fail|timeout|microcode)"   # expect empty
+(no match)
+
+$ rfkill list
+0: tpacpi_bluetooth_sw: Bluetooth
+	Soft blocked: no
+	Hard blocked: no
+1: hci0: Bluetooth
+	Soft blocked: no
+	Hard blocked: no
+2: phy0: Wireless LAN
+	Soft blocked: no
+	Hard blocked: no
+
+$ ip -br link
+lo               UNKNOWN        xx:xx:xx:xx:xx:xx <LOOPBACK,UP,LOWER_UP> 
+enp8s0           DOWN           xx:xx:xx:xx:xx:xx <NO-CARRIER,BROADCAST,MULTICAST,UP> 
+wlp2s0           UP             xx:xx:xx:xx:xx:xx <BROADCAST,MULTICAST,UP,LOWER_UP> 
+
+$ ip -br addr show wlp2s0
+wlp2s0           UP             192.168.x.x/24 fe80::xxxx/64 
+
+$ nmcli -t -f DEVICE,STATE,CONNECTION device | grep wlp2s0
+wlp2s0:connected:<ssid>
+p2p-dev-wlp2s0:disconnected:
+
+$ hciconfig -a   # AX210 Bluetooth (hci0)
+hci0:	Type: Primary  Bus: USB
+	BD Address: xx:xx:xx:xx:xx:xx  ACL MTU: 1021:4  SCO MTU: 96:6
+	UP RUNNING 
+	RX bytes:1543 acl:0 sco:0 events:105 errors:0
+	TX bytes:7483 acl:0 sco:0 commands:105 errors:0
+	Features: 0xbf 0xfe 0x0f 0xfe 0xdb 0xff 0x7b 0x87
+	Packet type: DM1 DM3 DM5 DH1 DH3 DH5 HV1 HV2 HV3 
+	Link policy: RSWITCH SNIFF 
+	Link mode: PERIPHERAL ACCEPT 
+	Name: 'thinkpad'
+	Class: 0x7c010c
+	Service Classes: Rendering, Capturing, Object Transfer, Audio, Telephony
+	Device Class: Computer, Laptop
+	HCI Version: 5.3 (0xc)  Revision: 0x363c
+	LMP Version: 5.3 (0xc)  Subversion: 0x363c
+	Manufacturer: Intel Corp. (2)
+
+
+$ lsmod | grep -E "iwlwifi|btusb|bluetooth"
+btusb                  77824  0
+iwlwifi               647168  1 iwlmvm
+btrtl                  32768  1 btusb
+btintel                69632  1 btusb
+btbcm                  24576  1 btusb
+btmtk                  36864  1 btusb
+cfg80211             1462272  4 wl,iwlmvm,iwlwifi,mac80211
+bluetooth            1032192  44 btrtl,btmtk,btintel,btbcm,bnep,btusb,rfcomm
+
+$ sudo flashrom -p internal -l biosmod.layout -i biosmod -v flash_image_12m.bin -N
+flashrom unknown on Linux 6.17.0-42-generic (x86_64)
+flashrom is free software, get the source code at https://flashrom.org
+
+Using clock_gettime for delay loops (clk_id: 1, resolution: 1ns).
+Using region: "biosmod".
+Found chipset "Intel HM77".
+Enabling flash write... SPI Configuration is locked down.
+FREG0: Flash Descriptor region (0x00000000-0x00000fff) is read-only.
+FREG1: BIOS region (0x00800000-0x00bfffff) is read-write.
+FREG2: Management Engine region (0x00001000-0x007fffff) is locked.
+Not all flash regions are freely accessible by flashrom. This is most likely
+due to an active ME. Please see https://flashrom.org/ME for details.
+At least some flash regions are read protected. You have to use a flash
+layout and include only accessible regions. For write operations, you'll
+additionally need the --noverify-all switch. See manpage for more details.
+Enabling hardware sequencing due to multiple flash chips detected.
+OK.
+Found Programmer flash chip "Opaque flash chip" (12288 kB, Programmer-specific) on internal.
+Verifying flash... VERIFIED.

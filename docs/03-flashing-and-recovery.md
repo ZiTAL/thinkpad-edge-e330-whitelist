@@ -4,8 +4,12 @@
 
 **The modified block was written and verified on 2026-11-05.** The exact
 command, power state and readback are in [`06-flash-log.md`](06-flash-log.md).
-This document is kept as the procedure reference and for re-flashing/rollback.
-The running OS still uses the old firmware in RAM until the next reboot.
+The machine was rebooted at 16:11 and boots normally from the patched block; a
+post-reboot `flashrom -v` re-verifies it (`VERIFIED`). The AX210 was then
+installed and tested on 2026-11-06: it is detected, `iwlwifi` loads, Wi-Fi
+connects, Bluetooth is up and **no 1802 appears** — see
+[`06-flash-log.md`](06-flash-log.md#card-test-2026-11-06-0932-boot). This
+document is kept as the procedure reference and for re-flashing/rollback.
 
 ## 1. Before you start
 

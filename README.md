@@ -1,8 +1,9 @@
 # ThinkPad Edge E330 — WiFi/WWAN whitelist removal
 
-**Status: firmware written and verified on 2026-11-05. Boot/card test pending.**
-The flash now contains the patched BIOS region; the running OS still uses the
-old code in RAM until the next reboot.
+**Status: complete — whitelist bypass confirmed on 2026-11-06.** The patched
+firmware boots with the Intel AX210 installed: Wi-Fi (`8086:2725`) and Bluetooth
+(`8087:0032`) are detected, `iwlwifi` loads without errors, the card connects to
+a network, and the `1802: Unauthorized network card` message does not appear.
 
 ---
 
@@ -32,7 +33,6 @@ old code in RAM until the next reboot.
 | [`docs/05-inventory-and-environment.md`](docs/05-inventory-and-environment.md) | File inventory and hashes, tools, versions, environment, commands used |
 | [`docs/06-flash-log.md`](docs/06-flash-log.md) | What was written, when, power state, verification and readback |
 | [`docs/evidence/README.md`](docs/evidence/README.md) | Evidence logs and raw validation output |
-| [`docs/es/README.md`](docs/es/README.md) | Original Spanish documentation (historical) |
 
 ## Local artifacts (not published)
 
@@ -52,22 +52,27 @@ Scripts: `patch_bios.py` (builds the patched image), `verify_layout.py`
 (validates everything), `lzma_test.py` (LZMA recompression probe),
 `search_strings.py` (UEFI string search).
 
-## Next step
+## Result
 
 The write **was performed and verified on 2026-11-05**. The exact command and
 output are in [`docs/06-flash-log.md`](docs/06-flash-log.md). The independent
 full BIOS-region readback matches `bios_region_patched.bin` byte for byte.
 
-The next step is to install the AX210 in the full-size WLAN slot, reconnect the
-adapter's USB cable for Bluetooth, reboot, and check:
+The AX210 was installed on 2026-11-06 and booted on the patched firmware:
 
-```bash
-lspci -nn | grep -i 8086:2725
-lsusb | grep -i 8087:0032
-dmesg | grep -iE 'iwlwifi|bluetooth'
+```text
+02:00.0 Network controller: Intel Corporation Wi-Fi 6E AX210 [8086:2725]
+Bus 002 Device 004: ID 8087:0032 Intel Corp. AX210 Bluetooth
+iwlwifi 0000:02:00.0: Detected Intel(R) Wi-Fi 6E AX210 160MHz
+wlp2s0: connected
 ```
 
-The command used, for reference:
+No `1802: Unauthorized network card` message and no `iwlwifi` errors appear in
+`dmesg`. Wi-Fi is up and associated with an access point; the AX210 Bluetooth
+controller (`hci0`, HCI 5.3) is also up. Raw capture:
+[`docs/evidence/ax210_card_test.txt`](docs/evidence/ax210_card_test.txt).
+
+The write command used, for reference:
 
 ```bash
 sudo flashrom -p internal -l biosmod.layout -i biosmod -w flash_image_12m.bin -N

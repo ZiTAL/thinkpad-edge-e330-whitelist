@@ -131,6 +131,30 @@ dd if=bios_region_patched.bin of=flash_image_12m.bin \
 sudo flashrom -p internal
 sudo flashrom -p internal -l biosmod.layout -i biosmod -v flash_image_12m.bin
 
+# Rollback image
+cp orig_bios_region.bin flash_image_original_12m.bin
+dd if=bios_region.bin of=flash_image_original_12m.bin \
+   bs=1 seek=8388608 conv=notrunc status=none
+
+# Write (2026-11-05)
+sudo systemd-inhibit --what=idle:sleep \
+  --why="ThinkPad E330 BIOS whitelist patch" \
+  flashrom -p internal -l biosmod.layout -i biosmod \
+  -w flash_image_12m.bin -N
+
+# Independent full-region readback
+sudo flashrom -p internal --ifd -i bios -r /tmp/opencode/readback_bios.bin
+# → full BIOS region matches patched: True / diff bytes: 0
+
+# Post-reboot and AX210 card test (2026-11-06)
+lspci -nn | grep -i network
+lsusb
+dmesg | grep -iE 'iwlwifi|1802|unauthorized|ax210|2725'
+rfkill list
+ip -br addr show wlp2s0
+hciconfig -a
+sudo flashrom -p internal -l biosmod.layout -i biosmod -v flash_image_12m.bin -N
+
 # REA / Ghidra
 GHIDRA_INSTALL_DIR=/opt/ghidra npx -y rea-agents@6.8.0 doctor --client opencode --json
 ```
@@ -149,20 +173,22 @@ GHIDRA_INSTALL_DIR=/opt/ghidra npx -y rea-agents@6.8.0 doctor --client opencode 
 - The module PE checksum is 0 and there is no security directory; it is not
   recalculated.
 - The patch does not touch the table or Bluetooth; only the error branch.
-- The modified block **was written and verified on 2026-11-05**; see
-  `docs/06-flash-log.md`. The boot/card test is pending.
+- The modified block **was written and verified on 2026-11-05**, and the AX210
+  card test **passed on 2026-11-06** (Wi-Fi + Bluetooth working, no 1802); see
+  `docs/06-flash-log.md`.
 - The public repository excludes the firmware dumps because they contain the
   Windows OEM key, the serial number and the MAC addresses.
 
-## 6. Pending tasks
+## 6. Task history
 
 1. ~~Decide whether to flash over software or wait for an SPI programmer.~~
    Done: software write on 2026-11-05.
 2. ~~Write the patched block and verify it.~~ Done: `Erase/write done` +
    `Verifying flash... VERIFIED.` and a full-region readback with 0 differences.
-3. Install the AX210 in the full-size WLAN slot, with MHF4 antennas and the
-   adapter's USB cable.
-4. Reboot and verify `lspci` (`8086:2725`), `lsusb` (`8087:0032`) and the
-   absence of 1802.
-5. Update `docs/06-flash-log.md` with the boot/card result.
+3. ~~Install the AX210 in the full-size WLAN slot, with MHF4 antennas and the
+   adapter's USB cable.~~ Done on 2026-11-06.
+4. ~~Reboot and verify `lspci` (`8086:2725`), `lsusb` (`8087:0032`) and the
+   absence of 1802.~~ Done: both halves detected, Wi-Fi connected, no 1802.
+5. ~~Update `docs/06-flash-log.md` with the boot/card result.~~ Done; see the
+   card test section.
 6. To roll back: reflash `bios_region.bin` (see doc 03).
